@@ -2,6 +2,7 @@ package com.example.karunakaran_prasad.weatherapp;
 
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.view.MenuItem;
 import android.view.View;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -49,6 +50,14 @@ public class MainFragment extends Fragment {
         inflater.inflate(R.menu.main_menu, menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.menu_refresh){
+            new FetchWeatherTask().execute(URL_STRING);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,7 +84,7 @@ public class MainFragment extends Fragment {
         ListView forecast_list_view = (ListView) root_view.findViewById (R.id.listview_forecast);
         forecast_list_view.setAdapter(mForeCastAdapter);
 
-        new FetchWeatherTask().execute(URL_STRING);
+
 
 
         return root_view;
