@@ -1,6 +1,7 @@
 package com.example.karunakaran_prasad.weatherapp;
 
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
+
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -30,6 +36,17 @@ public class MainFragment extends Fragment {
 
     public MainFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_menu, menu);
     }
 
 
