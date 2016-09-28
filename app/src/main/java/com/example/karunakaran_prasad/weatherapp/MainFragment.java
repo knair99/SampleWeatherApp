@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -108,6 +109,7 @@ public class MainFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+////////////////////////////Location start///////////////////////
 
     //Let's handle user's location now
     //First off define a listener for location changed events
@@ -120,6 +122,7 @@ public class MainFragment extends Fragment {
             //String location_string = "geo:37.7749,-122.4194";
             String location_string = "geo:" + last_known_latitude + "," + last_known_longitude;
             Intent intent = new Intent(Intent.ACTION_VIEW);
+            Toast.makeText(getContext(), "Starting your location provider ...", Toast.LENGTH_LONG).show();
             Uri parsed_location = Uri.parse(location_string);
             intent.setData(parsed_location);
             startActivity(intent);
@@ -158,6 +161,9 @@ public class MainFragment extends Fragment {
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+/////////////////////Loction end////////////////////
+
+
 
     private void UpdateWeatherInfo() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -198,7 +204,7 @@ public class MainFragment extends Fragment {
                 s = mForeCastAdapter.getItem(position);
                 //Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
                 Intent detailIntent = new Intent(getContext(), DetailActivity.class);
-                detailIntent.putExtra("DETAIL_DAY", s);
+                detailIntent.putExtra(getString(R.string.DETAIL_DAY), s);
                 startActivity(detailIntent);
             }
         });
@@ -293,7 +299,7 @@ public class MainFragment extends Fragment {
             Log.d("MainFragment", "Done executing in the background");
             //Toast.makeText(this, "Downloaded " + result + " bytes");
             //return result;
-            if(!result.equals(null)) {
+            if(result != null && result.length > 0) {
                 mForeCastAdapter.clear();
                 for (String s : result) {
                     mForeCastAdapter.add(s);

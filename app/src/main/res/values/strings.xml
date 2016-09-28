@@ -7,4 +7,6 @@
     <string name="action_settings">Settings</string>
     <string name="location_preference_key">location_preference_key</string>
     <string name="location_title">Location</string>
+    <string name="detail_fragment_menu_share">Share!</string>
+    <string name="DETAIL_DAY">DETAIL_DAY</string>
 </resources>

@@ -25,6 +25,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView tv = (TextView) findViewById(R.id.detail_fragment_text_view);
         tv.setText(weather_info);
 
+
     }
 
 
