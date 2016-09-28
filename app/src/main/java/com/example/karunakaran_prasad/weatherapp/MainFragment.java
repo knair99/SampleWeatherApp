@@ -12,10 +12,13 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.Toast;
+
 import java.text.SimpleDateFormat;
 
 import org.json.JSONArray;
@@ -52,6 +55,8 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -91,6 +96,15 @@ public class MainFragment extends Fragment {
 
         ListView forecast_list_view = (ListView) root_view.findViewById (R.id.listview_forecast);
         forecast_list_view.setAdapter(mForeCastAdapter);
+
+        forecast_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String s = null;
+                s = mForeCastAdapter.getItem(position);
+                Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return root_view;
     }

@@ -8,5 +8,5 @@
 
     <item android:id="@+id/menu_refresh"
         android:title="Refresh"
-        app:showAsAction="never"/>
+        app:showAsAction="ifRoom"/>
 </menu>
