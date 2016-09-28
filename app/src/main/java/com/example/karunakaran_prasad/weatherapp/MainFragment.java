@@ -1,26 +1,21 @@
 package com.example.karunakaran_prasad.weatherapp;
 
 import android.content.Intent;
-import android.icu.util.GregorianCalendar;
-import android.icu.util.TimeZone;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
-import android.text.format.Time;
-import android.view.MenuItem;
-import android.view.View;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,6 +66,11 @@ public class MainFragment extends Fragment {
         if(id == R.id.menu_refresh){
             new FetchWeatherTask().execute(URL_STRING);
         }
+        else if(id == R.id.menu_settings){
+            Intent settings_intent = new Intent(getContext(), SettingsActivity.class);
+            startActivity(settings_intent);
+        }
+        
 
         return super.onOptionsItemSelected(item);
     }
@@ -105,6 +106,7 @@ public class MainFragment extends Fragment {
                 s = mForeCastAdapter.getItem(position);
                 //Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
                 Intent detailIntent = new Intent(getContext(), DetailActivity.class);
+                detailIntent.putExtra("DETAIL_DAY", s);
                 startActivity(detailIntent);
             }
         });

@@ -6,4 +6,9 @@
     tools:context="com.example.karunakaran_prasad.weatherapp.DetailFragment">
 
 
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_fragment_text_view" />
 </FrameLayout>

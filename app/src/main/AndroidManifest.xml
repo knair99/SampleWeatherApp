@@ -26,6 +26,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.karunakaran_prasad.weatherapp.MainActivity" />
         </activity>
+        <activity android:name=".SettingsActivity"
+            android:label="SettingsActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+
+        </activity>
     </application>
 
 </manifest>
