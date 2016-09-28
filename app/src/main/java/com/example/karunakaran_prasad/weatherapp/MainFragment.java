@@ -59,6 +59,7 @@ public class MainFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        UpdateWeatherInfo();
     }
 
 
@@ -73,11 +74,9 @@ public class MainFragment extends Fragment {
         int id = item.getItemId();
         if(id == R.id.menu_refresh){
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            String weather_city = prefs.getString("location_preference_key", URL_CITY);
-            if (!weather_city.equals(null)) {
-                new FetchWeatherTask().execute(weather_city);
-            }
+
+            UpdateWeatherInfo();
+
         }
         else if(id == R.id.menu_settings){
             Intent settings_intent = new Intent(getContext(), SettingsActivity.class);
@@ -86,6 +85,14 @@ public class MainFragment extends Fragment {
         
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void UpdateWeatherInfo() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String weather_city = prefs.getString("location_preference_key", URL_CITY);
+        if (!weather_city.equals(null)) {
+            new FetchWeatherTask().execute(weather_city);
+        }
     }
 
     @Override
