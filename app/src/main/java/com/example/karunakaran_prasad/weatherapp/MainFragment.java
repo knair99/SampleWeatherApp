@@ -1,13 +1,21 @@
 package com.example.karunakaran_prasad.weatherapp;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -44,11 +52,23 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
  */
 public class MainFragment extends Fragment {
 
+    public static final int REQUEST_CODE = 1337;
+    public static final int LOCATION_REQUEST_CODE = REQUEST_CODE;
+    public static final int LOCATION_MIN_TIME = 60000;
+    public static final int LOCATION_MIN_DISTANCE = 10;
     public ArrayAdapter<String> mForeCastAdapter;
     public static final String URL_STRING_BASE = "http://api.openweathermap.org/data/2.5/forecast/daily?q=";
-    public static final String URL_CITY ="Queens";
+    public static final String URL_CITY = "Queens";
     public static final String URL_PARAMS = "&cnt=7&APPID=e3226c55f0b50d304e1a7e408117354e&units=imperial";
 
+    public static String last_known_longitude = "";
+    public static String last_known_latitude = "";
+
+    private static final String[] LOCATION_PERMS={
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
+    private static LocationManager mLocationManager;
 
 
     public MainFragment() {
@@ -63,7 +83,6 @@ public class MainFragment extends Fragment {
     }
 
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main_menu, menu);
@@ -71,20 +90,73 @@ public class MainFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+
         int id = item.getItemId();
-        if(id == R.id.menu_refresh){
-
-
+        if (id == R.id.menu_refresh) {
             UpdateWeatherInfo();
-
-        }
-        else if(id == R.id.menu_settings){
+        } else if (id == R.id.menu_settings) {
             Intent settings_intent = new Intent(getContext(), SettingsActivity.class);
             startActivity(settings_intent);
+        } else if (id == R.id.menu_locator) {
+
+            mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+            requestPermissions(LOCATION_PERMS, LOCATION_REQUEST_CODE);
         }
-        
+
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //Let's handle user's location now
+    //First off define a listener for location changed events
+    public final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(final Location location) {
+            last_known_latitude += location.getLatitude();
+            last_known_longitude += location.getLongitude();
+
+            //String location_string = "geo:37.7749,-122.4194";
+            String location_string = "geo:" + last_known_latitude + "," + last_known_longitude;
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri parsed_location = Uri.parse(location_string);
+            intent.setData(parsed_location);
+            startActivity(intent);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(requestCode == LOCATION_REQUEST_CODE){
+
+            if (ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            {
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_MIN_TIME,
+                        LOCATION_MIN_DISTANCE, mLocationListener);
+            }
+
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void UpdateWeatherInfo() {
@@ -332,5 +404,3 @@ public class MainFragment extends Fragment {
 
 }
 
-//http://api.openweathermap.org/data/2.5/forecast/daily?id=5375480&cnt=7&APPID=e3226c55f0b50d304e1a7e408117354e
-//http://api.openweathermap.org/data/2.5/forecast/daily?id=5375480&cnt=7&APPID=e3226c55f0b50d304e1a7e408117354e&units=metric

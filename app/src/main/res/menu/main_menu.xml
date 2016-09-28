@@ -9,4 +9,6 @@
     <item android:id="@+id/menu_refresh"
         android:title="Refresh"
         app:showAsAction="ifRoom"/>
+    <item android:title="Where am I?"
+        android:id="@+id/menu_locator" />
 </menu>
