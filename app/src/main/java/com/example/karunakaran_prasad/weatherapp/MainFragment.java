@@ -1,8 +1,12 @@
 package com.example.karunakaran_prasad.weatherapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
@@ -32,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 
 /**
@@ -41,7 +45,11 @@ import java.util.List;
 public class MainFragment extends Fragment {
 
     public ArrayAdapter<String> mForeCastAdapter;
-    public static final String URL_STRING = "http://api.openweathermap.org/data/2.5/forecast/daily?id=5375480&cnt=7&APPID=e3226c55f0b50d304e1a7e408117354e&units=metric";
+    public static final String URL_STRING_BASE = "http://api.openweathermap.org/data/2.5/forecast/daily?q=";
+    public static final String URL_CITY ="Queens";
+    public static final String URL_PARAMS = "&cnt=7&APPID=e3226c55f0b50d304e1a7e408117354e&units=imperial";
+
+
 
     public MainFragment() {
         // Required empty public constructor
@@ -64,7 +72,12 @@ public class MainFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.menu_refresh){
-            new FetchWeatherTask().execute(URL_STRING);
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            String weather_city = prefs.getString("location_preference_key", URL_CITY);
+            if (!weather_city.equals(null)) {
+                new FetchWeatherTask().execute(weather_city);
+            }
         }
         else if(id == R.id.menu_settings){
             Intent settings_intent = new Intent(getContext(), SettingsActivity.class);
@@ -122,7 +135,8 @@ public class MainFragment extends Fragment {
 
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
-            String url_weather = args[0];
+            String url_weather = URL_STRING_BASE + args[0] + URL_PARAMS;
+
             Log.d("MainFragment", "FetchWeatherTask: doInBackground : "  + url_weather);
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
