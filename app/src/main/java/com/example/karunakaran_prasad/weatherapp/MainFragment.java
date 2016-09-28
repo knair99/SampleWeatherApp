@@ -1,5 +1,6 @@
 package com.example.karunakaran_prasad.weatherapp;
 
+import android.content.Intent;
 import android.icu.util.GregorianCalendar;
 import android.icu.util.TimeZone;
 import android.os.AsyncTask;
@@ -102,7 +103,9 @@ public class MainFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String s = null;
                 s = mForeCastAdapter.getItem(position);
-                Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+                Intent detailIntent = new Intent(getContext(), DetailActivity.class);
+                startActivity(detailIntent);
             }
         });
 
