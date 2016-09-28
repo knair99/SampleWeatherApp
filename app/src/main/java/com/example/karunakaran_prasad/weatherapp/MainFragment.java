@@ -151,7 +151,7 @@ public class MainFragment extends Fragment {
                     && ActivityCompat.checkSelfPermission(getContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             {
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_MIN_TIME,
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_MIN_TIME,
                         LOCATION_MIN_DISTANCE, mLocationListener);
             }
 
